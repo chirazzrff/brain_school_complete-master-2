@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
+import '../../admin/Admin Dashboard.dart';
 import '../password/Forgot Password.dart';
 import '../Signup_Screen/Signup_Screen.dart';
 
@@ -60,7 +60,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 Navigator.pushReplacementNamed(context, 'ParentProfile');
                 break;
               case 'Admin':
-                Navigator.pushReplacementNamed(context, 'AdminDashboard');
+                Navigator.pushReplacementNamed(context, AdminDashboard.routeName);
+
                 break;
               default:
                 ScaffoldMessenger.of(context).showSnackBar(

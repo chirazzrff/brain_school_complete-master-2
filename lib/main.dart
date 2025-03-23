@@ -1,11 +1,18 @@
 import 'package:brain_school/routes.dart';
-import 'package:brain_school/screens/admin/admin_dashboard.dart';
+import 'package:brain_school/screens/admin/manage_Users.dart';
 import 'package:brain_school/screens/splash_screen/splash_screen.dart';
 import 'package:brain_school/screens/signup_screen/signup_screen.dart';
 import 'package:brain_school/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'admin/Admin Dashboard.dart';
+import 'admin/manage_users.dart';
+import 'admin/manageStudents.dart';
+import 'admin/manage_notifications.dart';
+import 'admin/manage_payments.dart';
+import 'admin/manage_schools.dart';
+import 'admin/view_data.dart';
 
 
 void main() async {
@@ -32,6 +39,12 @@ class MyApp extends StatelessWidget {
           ...routes,
           SignUpScreen.routeName: (context) => SignUpScreen(),
           AdminDashboard.routeName: (context) => AdminDashboard(),
+          ManageNotificationsScreen.routeName: (context) => ManageNotificationsScreen(),
+          ManageUsersScreen.routeName: (context) => ManageUsersScreen(),
+          ManageSchoolsScreen.routeName: (context) => ManageSchoolsScreen(),
+          ManagePaymentsScreen.routeName: (context) => ManagePaymentsScreen(),
+          ViewDataScreen.routeName: (context) => ViewDataScreen(),
+          ManageStudentsScreen.routeName: (context) => ManageStudentsScreen(),
         },
       );
     });

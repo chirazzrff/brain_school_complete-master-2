@@ -1,7 +1,7 @@
 import 'package:brain_school/constants.dart';
 import 'package:brain_school/screens/assignment_screen/assignment_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sizer/sizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:brain_school/screens/my_profile/teacher_profile.dart';
@@ -42,6 +42,43 @@ class _TeacherHomeScreenState extends State<TeacherHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: kPrimaryColor,
+        title: Text('Espace Professeur'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              Scaffold.of(context).openDrawer(); // Ouvrir le menu latéral
+            },
+          ),
+        ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            UserAccountsDrawerHeader(
+              accountName: Text(teacherName),
+              accountEmail: Text('teacher@example.com'), // Utilise l'email de l'utilisateur
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: AssetImage('assets/images/teacher.png'), // Image par défaut
+              ),
+            ),
+            ListTile(
+              title: Text('Voir Profil'),
+              onTap: () {
+                Navigator.pushNamed(context, TeacherProfileScreen.routeName);
+              },
+            ),
+            ListTile(
+              title: Text('Déconnexion'),
+              onTap: () {
+                supabase.auth.signOut(); // Déconnexion de Supabase
+              },
+            ),
+          ],
+        ),
+      ),
       body: Column(
         children: [
           Container(

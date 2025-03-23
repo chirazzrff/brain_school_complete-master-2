@@ -46,6 +46,7 @@ class _TeacherProfileScreenState extends State<TeacherProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: kPrimaryColor,
         title: Text('Teacher Profile'),
         centerTitle: true,
       ),
@@ -66,6 +67,7 @@ class _TeacherProfileScreenState extends State<TeacherProfileScreen> {
                   CircleAvatar(
                     radius: 10.w,
                     backgroundImage: AssetImage('assets/images/teacher.png'),
+                    // Si l'avatar du professeur existe dans la base de données, tu peux changer l'image.
                   ),
                   SizedBox(height: 1.h),
                   Text(
@@ -79,6 +81,24 @@ class _TeacherProfileScreenState extends State<TeacherProfileScreen> {
             ProfileDetailRow(title: 'Email', value: email),
             ProfileDetailRow(title: 'Phone Number', value: phoneNumber),
             ProfileDetailRow(title: 'Subject', value: subject),
+            SizedBox(height: 3.h),
+            ElevatedButton(
+              onPressed: () {
+                // Redirection vers une page de mise à jour du profil
+                Navigator.pushNamed(context, '/update-profile');
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: kPrimaryColor,
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 2.h),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              child: Text(
+                'Modifier Profil',
+                style: TextStyle(fontSize: 16.sp),
+              ),
+            ),
           ],
         ),
       ),

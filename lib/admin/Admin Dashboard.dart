@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'manageStudents.dart';
+import 'manageSyllabus.dart';
 import 'manage_users.dart';
 import 'manage_schools.dart';
 import 'manage_payments.dart';
 import 'view_data.dart';
+import 'manage_notifications.dart';
 
 class AdminDashboard extends StatelessWidget {
   static const String routeName = '/adminDashboard';
@@ -77,6 +80,23 @@ class AdminDashboard extends StatelessWidget {
                   title: "Voir les données",
                   route: ViewDataScreen.routeName,
                 ),
+                AdminCard(
+                  icon: Icons.notifications,
+                  title: "Gérer les notifications",
+                  route: ManageNotificationsScreen.routeName,
+                ),
+                AdminCard(
+                  icon: Icons.people,
+                  title: "Liste des étudiants",
+                  route: ManageStudentsScreen.routeName,
+                ),
+                AdminCard(
+                  icon: Icons.book,
+                  title: "Liste des syllabus",
+                  route: ManageSyllabusScreen.routeName,  // Nom du route pour la gestion des syllabus
+                ),
+
+
               ],
             ),
           ),
