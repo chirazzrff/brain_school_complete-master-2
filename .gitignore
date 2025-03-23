@@ -44,3 +44,13 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+build/
+.dart_tool/
+.idea/
+.vscode/
+pubspec.lock
+build/
+.dart_tool/
+.idea/
+.vscode/
+pubspec.lock
