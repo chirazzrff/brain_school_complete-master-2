@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
           ManagePaymentsScreen.routeName: (context) => ManagePaymentsScreen(),
           ViewDataScreen.routeName: (context) => ViewDataScreen(),
           ManageStudentsScreen.routeName: (context) => ManageStudentsScreen(),
+
         },
       );
     });
