@@ -1,11 +1,12 @@
-import 'package:brain_school/constants.dart';
+import 'package:brain_school/screens/my_profile/my_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'constants.dart';  // Import the constants file
 
 class MyProfileScreen extends StatelessWidget {
   const MyProfileScreen({Key? key}) : super(key: key);
 
-  static const String routeName = '/my_profile'; // ✅ route claire et standard
+  static const String routeName = '/my_profile'; // Route name
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class MyProfileScreen extends StatelessWidget {
         actions: [
           InkWell(
             onTap: () {
-              // send report to school management
+              // Implement reporting logic here
             },
             child: Padding(
               padding: EdgeInsets.only(right: kDefaultPadding / 2),
@@ -37,7 +38,6 @@ class MyProfileScreen extends StatelessWidget {
         color: kOtherColor,
         child: Column(
           children: [
-            // Profile Header Section
             Container(
               width: 100.w,
               height: SizerUtil.deviceType == DeviceType.tablet ? 19.h : 15.h,
@@ -76,8 +76,7 @@ class MyProfileScreen extends StatelessWidget {
                 ],
               ),
             ),
-            sizedBox,
-            // Profile Detail Rows (Basic Info)
+            kHalfSizedBox,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: const [
@@ -99,8 +98,7 @@ class MyProfileScreen extends StatelessWidget {
                 ProfileDetailRow(title: 'Date of Birth', value: '3 May 1998'),
               ],
             ),
-            sizedBox,
-            // Profile Detail Columns (Additional Info)
+            kHalfSizedBox,
             const ProfileDetailColumn(
               title: 'Email',
               value: 'aisha12@gmail.com',
@@ -120,88 +118,6 @@ class MyProfileScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class ProfileDetailRow extends StatelessWidget {
-  final String title;
-  final String value;
-
-  const ProfileDetailRow({Key? key, required this.title, required this.value})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 40.w,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  color: kTextBlackColor,
-                  fontSize: SizerUtil.deviceType == DeviceType.tablet ? 7.sp : 9.sp,
-                ),
-              ),
-              kHalfSizedBox,
-              Text(value, style: Theme.of(context).textTheme.bodySmall),
-              kHalfSizedBox,
-              SizedBox(
-                width: 35.w,
-                child: const Divider(thickness: 1.0),
-              ),
-            ],
-          ),
-          Icon(Icons.lock_outline, size: 10.sp),
-        ],
-      ),
-    );
-  }
-}
-
-class ProfileDetailColumn extends StatelessWidget {
-  final String title;
-  final String value;
-
-  const ProfileDetailColumn(
-      {Key? key, required this.title, required this.value})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                color: kTextBlackColor,
-                fontSize: SizerUtil.deviceType == DeviceType.tablet
-                    ? 7.sp
-                    : 11.sp,
-              ),
-            ),
-            kHalfSizedBox,
-            Text(value, style: Theme.of(context).textTheme.bodySmall),
-            kHalfSizedBox,
-            SizedBox(
-              width: 92.w,
-              child: const Divider(thickness: 1.0),
-            ),
-          ],
-        ),
-        Icon(Icons.lock_outline, size: 10.sp),
-      ],
     );
   }
 }

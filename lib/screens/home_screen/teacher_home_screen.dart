@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../teacher/CahierDeTexteScreen.dart';
+import '../../teacher/EmploiDuTempsScreen.dart';
 import '../../teacher/ModifierProfilScreen.dart';
 import '../../teacher/MyCoursesScreen.dart';
 import '../../teacher/StudentsListScreen.dart';
-import '../../teacher/ExamResultsScreen.dart';  // Importer l'écran des résultats des examens
-import 'CahierDeTexteScreen.dart';
-import 'MyCoursesScreen.dart';
+import '../../teacher/ExamResultsScreen.dart';
 import 'MesCoursScreen.dart';
-import 'CahierDeTexteScreen.dart';
-import 'ModifierProfilScreen.dart';
-import 'StudentsListScreen.dart';
+import 'emploi_du_temps_screen.dart';
 
 class TeacherHomeScreen extends StatelessWidget {
   const TeacherHomeScreen({Key? key}) : super(key: key);
@@ -82,12 +79,11 @@ class TeacherHomeScreen extends StatelessWidget {
 
     // Fonction pour déconnecter l'utilisateur
     void _logout() {
-      // Implémenter la logique de déconnexion ici (par exemple, rediriger vers l'écran de connexion)
-      Navigator.pushReplacementNamed(context, '/login');  // Exemple de redirection vers un écran de login
+      Navigator.pushReplacementNamed(context, '/login');
     }
 
     return Scaffold(
-      backgroundColor: Colors.white, // Fond blanc pour l'uniformité
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           // HEADER BLEU
@@ -95,7 +91,7 @@ class TeacherHomeScreen extends StatelessWidget {
             width: double.infinity,
             height: 180,
             decoration: BoxDecoration(
-              color: Color(0xFF345FB4), // Bleu profond
+              color: Color(0xFF345FB4),
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(30),
                 bottomRight: Radius.circular(30),
@@ -123,10 +119,9 @@ class TeacherHomeScreen extends StatelessWidget {
             ),
           ),
 
-          // ESPACE ENTRE LE HEADER ET LES BOUTONS
           SizedBox(height: 20),
 
-          // BOUTONS POUR LES FONCTIONS DU PROFESSEUR
+          // BOUTONS
           Expanded(
             child: GridView.count(
               crossAxisCount: 2,
@@ -135,8 +130,8 @@ class TeacherHomeScreen extends StatelessWidget {
               mainAxisSpacing: 15,
               children: [
                 HomeCard(
-                  icon: Icons.account_circle,  // Icône pour le profil
-                  title: "Modifier le profil",  // Titre du bouton
+                  icon: Icons.account_circle,
+                  title: "Modifier le profil",
                   onPress: () {
                     Navigator.push(
                       context,
@@ -168,7 +163,10 @@ class TeacherHomeScreen extends StatelessWidget {
                   icon: Icons.schedule,
                   title: "Emploi du temps",
                   onPress: () {
-                    // Logique pour l'emploi du temps
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => EmploiDuTempsScreen()),
+                    );
                   },
                 ),
                 HomeCard(
@@ -200,11 +198,11 @@ class TeacherHomeScreen extends StatelessWidget {
                 ),
                 HomeCard(
                   icon: Icons.assignment,
-                  title: "Consulter les résultats des examens",  // Nouveau bouton
+                  title: "Consulter les résultats des examens",
                   onPress: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ExamResultsScreen()),  // Naviguer vers l'écran des résultats
+                      MaterialPageRoute(builder: (context) => ExamResultsScreen()),
                     );
                   },
                 ),
@@ -235,8 +233,8 @@ class HomeCard extends StatelessWidget {
       onTap: onPress,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white, // Fond blanc pour les cartes
-          borderRadius: BorderRadius.circular(15), // Coins arrondis
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.2),
@@ -250,7 +248,7 @@ class HomeCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 50, color: Color(0xFF345FB4)), // Icône avec la couleur bleu
+            Icon(icon, size: 50, color: Color(0xFF345FB4)),
             SizedBox(height: 15),
             Text(
               title,
@@ -258,7 +256,7 @@ class HomeCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF345FB4), // Texte en bleu
+                color: Color(0xFF345FB4),
               ),
             ),
           ],

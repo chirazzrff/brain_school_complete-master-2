@@ -50,6 +50,7 @@ Map<String, WidgetBuilder> routes = {
   ViewDataScreen.routeName: (context) => ViewDataScreen(),
   ManageStudentsScreen.routeName: (context) => ManageStudentsScreen(),
   ManageSyllabusScreen.routeName: (context) => ManageSyllabusScreen(),
+  MyProfileScreen.routeName: (context) => const MyProfileScreen(),
 
 
 };
