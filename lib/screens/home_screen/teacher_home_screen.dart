@@ -3,12 +3,13 @@ import '../../teacher/CahierDeTexteScreen.dart';
 import '../../teacher/ModifierProfilScreen.dart';
 import '../../teacher/MyCoursesScreen.dart';
 import '../../teacher/StudentsListScreen.dart';
+import '../../teacher/ExamResultsScreen.dart';  // Importer l'écran des résultats des examens
 import 'CahierDeTexteScreen.dart';
 import 'MyCoursesScreen.dart';
-import 'MesCoursScreen.dart';  // Ajouter la classe Mes Cours
-import 'CahierDeTexteScreen.dart'; // Assurez-vous d'avoir ce fichier pour la navigation
-import 'ModifierProfilScreen.dart';  // Importer l'écran Modifier Profil
-import 'StudentsListScreen.dart'; // Importer l'écran Voir les élèves inscrits
+import 'MesCoursScreen.dart';
+import 'CahierDeTexteScreen.dart';
+import 'ModifierProfilScreen.dart';
+import 'StudentsListScreen.dart';
 
 class TeacherHomeScreen extends StatelessWidget {
   const TeacherHomeScreen({Key? key}) : super(key: key);
@@ -189,11 +190,21 @@ class TeacherHomeScreen extends StatelessWidget {
                 ),
                 HomeCard(
                   icon: Icons.school,
-                  title: "Voir les élèves inscrits",  // Nouveau bouton
+                  title: "Voir les élèves inscrits",
                   onPress: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => StudentsListScreen()),
+                    );
+                  },
+                ),
+                HomeCard(
+                  icon: Icons.assignment,
+                  title: "Consulter les résultats des examens",  // Nouveau bouton
+                  onPress: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ExamResultsScreen()),  // Naviguer vers l'écran des résultats
                     );
                   },
                 ),
