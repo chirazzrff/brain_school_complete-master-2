@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
-class Notification {
+class NotificationModel {
   String title;
   String message;
   bool isRead;
+  bool isEnabled; // Pour activer ou désactiver la notification
 
-  Notification({
+  NotificationModel({
     required this.title,
     required this.message,
     this.isRead = false,
+    this.isEnabled = true, // Par défaut, la notification est activée
   });
 }
 
@@ -19,11 +21,11 @@ class NotificationsScreen extends StatefulWidget {
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
   // Liste des notifications
-  List<Notification> notifications = [
-    Notification(title: 'Réunion importante', message: 'Il y a une réunion ce vendredi à 10h.', isRead: false),
-    Notification(title: 'Changement de planning', message: 'Votre emploi du temps a été modifié.', isRead: true),
-    Notification(title: 'Inspection', message: 'Préparez-vous pour une inspection lundi prochain.', isRead: false),
-    // Ajoutez plus de notifications si nécessaire
+  List<NotificationModel> notifications = [
+    NotificationModel(title: 'Réunion importante', message: 'Il y a une réunion ce vendredi à 10h.', isRead: false),
+    NotificationModel(title: 'Changement de planning', message: 'Votre emploi du temps a été modifié.', isRead: true),
+    NotificationModel(title: 'Examen', message: 'L\'examen de mathématiques est prévu pour lundi.', isRead: false),
+    NotificationModel(title: 'Devoir à rendre', message: 'Vous devez rendre le devoir de physique avant vendredi.', isRead: false),
   ];
 
   // Marquer la notification comme lue ou non lue
@@ -40,11 +42,47 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     });
   }
 
+  // Activer ou désactiver une notification
+  void _toggleNotificationStatus(int index) {
+    setState(() {
+      notifications[index].isEnabled = !notifications[index].isEnabled;
+    });
+  }
+
+  // Afficher les détails de la notification
+  void _showNotificationDetails(BuildContext context, NotificationModel notification) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(notification.title),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Message: ${notification.message}'),
+              SizedBox(height: 10),
+              Text('Statut: ${notification.isRead ? "Lu" : "Non lu"}'),
+              Text('Notification activée: ${notification.isEnabled ? "Oui" : "Non"}'),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Ferme la mise à jour
+              },
+              child: Text('Fermer'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notifications'),
+        title: Text('Gérer les Notifications'),
         backgroundColor: Colors.blue,
       ),
       body: ListView.builder(
@@ -76,14 +114,59 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   color: notification.isRead ? Colors.grey : Colors.black,
                 ),
               ),
-              trailing: IconButton(
-                icon: Icon(Icons.delete, color: Colors.red),
-                onPressed: () => _deleteNotification(index),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Bouton pour activer/désactiver la notification
+                  IconButton(
+                    icon: Icon(
+                      notification.isEnabled ? Icons.notifications : Icons.notifications_off,
+                      color: notification.isEnabled ? Colors.blue : Colors.grey,
+                    ),
+                    onPressed: () => _toggleNotificationStatus(index),
+                  ),
+                  // Bouton pour supprimer la notification
+                  IconButton(
+                    icon: Icon(Icons.delete, color: Colors.red),
+                    onPressed: () => _deleteNotification(index),
+                  ),
+                ],
               ),
-              onTap: () => _toggleReadStatus(index), // Marquer comme lue/non lue
+              onTap: () {
+                _toggleReadStatus(index); // Marquer comme lue/non lue
+                _showNotificationDetails(context, notification); // Afficher les détails de la notification
+              },
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class TeacherHomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Espace Professeur'),
+        backgroundColor: Colors.blue,
+      ),
+      body: Column(
+        children: [
+          // Titre de l'écran
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              // Navigation vers l'écran des notifications
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NotificationsScreen()),
+              );
+            },
+            child: Text("Gérer les Notifications"),
+          ),
+        ],
       ),
     );
   }

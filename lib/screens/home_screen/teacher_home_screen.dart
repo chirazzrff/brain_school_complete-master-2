@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../teacher/CahierDeTexteScreen.dart';
+import '../../teacher/ModifierProfilScreen.dart';
 import '../../teacher/MyCoursesScreen.dart';
+import '../../teacher/StudentsListScreen.dart';
 import 'CahierDeTexteScreen.dart';
 import 'MyCoursesScreen.dart';
 import 'MesCoursScreen.dart';  // Ajouter la classe Mes Cours
 import 'CahierDeTexteScreen.dart'; // Assurez-vous d'avoir ce fichier pour la navigation
+import 'ModifierProfilScreen.dart';  // Importer l'écran Modifier Profil
+import 'StudentsListScreen.dart'; // Importer l'écran Voir les élèves inscrits
 
 class TeacherHomeScreen extends StatelessWidget {
   const TeacherHomeScreen({Key? key}) : super(key: key);
@@ -131,6 +134,16 @@ class TeacherHomeScreen extends StatelessWidget {
               mainAxisSpacing: 15,
               children: [
                 HomeCard(
+                  icon: Icons.account_circle,  // Icône pour le profil
+                  title: "Modifier le profil",  // Titre du bouton
+                  onPress: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ModifierProfilScreen()),
+                    );
+                  },
+                ),
+                HomeCard(
                   icon: Icons.book,
                   title: "Mes Cours",
                   onPress: () {
@@ -173,6 +186,16 @@ class TeacherHomeScreen extends StatelessWidget {
                   icon: Icons.logout,
                   title: "Déconnexion",
                   onPress: _logout,
+                ),
+                HomeCard(
+                  icon: Icons.school,
+                  title: "Voir les élèves inscrits",  // Nouveau bouton
+                  onPress: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => StudentsListScreen()),
+                    );
+                  },
                 ),
               ],
             ),

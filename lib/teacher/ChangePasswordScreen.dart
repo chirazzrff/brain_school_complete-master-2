@@ -43,90 +43,124 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Changer le mot de passe'),
+        backgroundColor: Colors.blueAccent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: Column(
-            children: [
-              // Champ pour l'ancien mot de passe
-              TextFormField(
-                controller: _oldPasswordController,
-                obscureText: _obscureOldPassword,
-                decoration: InputDecoration(
-                  labelText: 'Ancien mot de passe',
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                        _obscureOldPassword ? Icons.visibility_off : Icons.visibility),
-                    onPressed: () {
-                      setState(() {
-                        _obscureOldPassword = !_obscureOldPassword;
-                      });
-                    },
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Champ pour l'ancien mot de passe
+                TextFormField(
+                  controller: _oldPasswordController,
+                  obscureText: _obscureOldPassword,
+                  decoration: InputDecoration(
+                    labelText: 'Ancien mot de passe',
+                    labelStyle: TextStyle(fontSize: 16, color: Colors.blueGrey),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                          _obscureOldPassword ? Icons.visibility_off : Icons.visibility,
+                          color: Colors.blueGrey),
+                      onPressed: () {
+                        setState(() {
+                          _obscureOldPassword = !_obscureOldPassword;
+                        });
+                      },
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Veuillez entrer l\'ancien mot de passe';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 16),
+                // Champ pour le nouveau mot de passe
+                TextFormField(
+                  controller: _newPasswordController,
+                  obscureText: _obscureNewPassword,
+                  decoration: InputDecoration(
+                    labelText: 'Nouveau mot de passe',
+                    labelStyle: TextStyle(fontSize: 16, color: Colors.blueGrey),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                          _obscureNewPassword ? Icons.visibility_off : Icons.visibility,
+                          color: Colors.blueGrey),
+                      onPressed: () {
+                        setState(() {
+                          _obscureNewPassword = !_obscureNewPassword;
+                        });
+                      },
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Veuillez entrer un nouveau mot de passe';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 16),
+                // Champ pour confirmer le nouveau mot de passe
+                TextFormField(
+                  controller: _confirmPasswordController,
+                  obscureText: _obscureConfirmPassword,
+                  decoration: InputDecoration(
+                    labelText: 'Confirmer le mot de passe',
+                    labelStyle: TextStyle(fontSize: 16, color: Colors.blueGrey),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                          _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
+                          color: Colors.blueGrey),
+                      onPressed: () {
+                        setState(() {
+                          _obscureConfirmPassword = !_obscureConfirmPassword;
+                        });
+                      },
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Veuillez confirmer votre nouveau mot de passe';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 32),
+                ElevatedButton(
+                  onPressed: _changePassword,
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 16), backgroundColor: Colors.blueAccent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: Text(
+                    'Changer le mot de passe',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer l\'ancien mot de passe';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20),
-              // Champ pour le nouveau mot de passe
-              TextFormField(
-                controller: _newPasswordController,
-                obscureText: _obscureNewPassword,
-                decoration: InputDecoration(
-                  labelText: 'Nouveau mot de passe',
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                        _obscureNewPassword ? Icons.visibility_off : Icons.visibility),
-                    onPressed: () {
-                      setState(() {
-                        _obscureNewPassword = !_obscureNewPassword;
-                      });
-                    },
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer un nouveau mot de passe';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20),
-              // Champ pour confirmer le nouveau mot de passe
-              TextFormField(
-                controller: _confirmPasswordController,
-                obscureText: _obscureConfirmPassword,
-                decoration: InputDecoration(
-                  labelText: 'Confirmer le mot de passe',
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                        _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility),
-                    onPressed: () {
-                      setState(() {
-                        _obscureConfirmPassword = !_obscureConfirmPassword;
-                      });
-                    },
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez confirmer votre nouveau mot de passe';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 40),
-              ElevatedButton(
-                onPressed: _changePassword,
-                child: Text('Changer le mot de passe'),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
