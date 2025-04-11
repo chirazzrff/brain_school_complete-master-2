@@ -3,6 +3,7 @@ import 'package:brain_school/screens/admin/manage_Users.dart';
 import 'package:brain_school/screens/my_profile/my_profile.dart';
 import 'package:brain_school/screens/splash_screen/splash_screen.dart';
 import 'package:brain_school/screens/signup_screen/signup_screen.dart';
+import 'package:brain_school/student/student_profile_screen.dart';
 import 'package:brain_school/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -15,6 +16,7 @@ import 'admin/manage_payments.dart';
 import 'admin/manage_schools.dart';
 import 'admin/view_data.dart';
 import 'screens/student_profile_screen.dart';
+
 
 
 void main() async {
@@ -48,7 +50,8 @@ class MyApp extends StatelessWidget {
           ViewDataScreen.routeName: (context) => ViewDataScreen(),
           ManageStudentsScreen.routeName: (context) => ManageStudentsScreen(),
           MyProfileScreen.routeName: (context) => MyProfileScreen(),
-
+          MyProfileScreen.routeName: (context) => const MyProfileScreen(),
+          'StudentProfile': (context) => StudentProfileScreen(),
         },
       );
     });

@@ -1,27 +1,23 @@
-buildscript {
-    repositories {
-        google()
-        jcenter()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
-    }
+plugins {
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android"
+    id "flutter"
 }
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
+android {
+    compileSdkVersion 30
+
+    defaultConfig {
+        applicationId "com.alixumer.schoolapp.brain_school"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
     }
-}
 
-rootProject.buildDir = '../build'
-subprojects {
-    project.buildDir = "${rootProject.buildDir}/${project.name}"
-    project.evaluationDependsOn(':app')
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
+    buildTypes {
+        release {
+            signingConfig signingConfigs.debug
+        }
+    }
 }
