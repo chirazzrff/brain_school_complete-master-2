@@ -7,9 +7,11 @@ import '../../teacher/MyCoursesScreen.dart';
 import '../../teacher/NotificationsScreen.dart';
 import '../../teacher/StudentsListScreen.dart';
 import '../../teacher/ExamResultsScreen.dart';
+import '../../teacher/SyllabusScreen.dart'; // ✅ Import ajouté
+
 import 'MesCoursScreen.dart';
 import 'emploi_du_temps_screen.dart';
-import 'NotificationsScreen.dart';  // Assurez-vous d'importer le fichier NotificationsScreen.dart
+import 'NotificationsScreen.dart';
 
 class TeacherHomeScreen extends StatelessWidget {
   const TeacherHomeScreen({Key? key}) : super(key: key);
@@ -18,46 +20,6 @@ class TeacherHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String teacherName = 'Mr. Karim B.';
-
-    // Fonction pour changer le mot de passe
-    void _changePassword() {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Changer le Mot de Passe'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(labelText: 'Nouveau mot de passe'),
-                ),
-                TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(labelText: 'Confirmer le mot de passe'),
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Annuler'),
-              ),
-              TextButton(
-                onPressed: () {
-                  // Ajouter la logique pour changer le mot de passe ici
-                  Navigator.pop(context);
-                },
-                child: Text('Changer'),
-              ),
-            ],
-          );
-        },
-      );
-    }
 
     // Fonction pour déconnecter l'utilisateur
     void _logout() {
@@ -171,7 +133,6 @@ class TeacherHomeScreen extends StatelessWidget {
                     );
                   },
                 ),
-
                 HomeCard(
                   icon: Icons.logout,
                   title: "Déconnexion",
@@ -194,6 +155,16 @@ class TeacherHomeScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => ExamResultsScreen()),
+                    );
+                  },
+                ),
+                HomeCard(
+                  icon: Icons.picture_as_pdf, // ✅ Icône PDF
+                  title: "Télécharger le syllabus",
+                  onPress: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SyllabusScreen()),
                     );
                   },
                 ),

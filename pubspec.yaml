@@ -45,6 +45,10 @@ dependencies:
   intl: ^0.18.1
   image_picker: ^0.8.5+3
   archive: ^3.4.3
+  http: ^0.13.6
+  path_provider: ^2.1.1
+  open_file: ^3.3.2
+  share_plus: ^7.0.2
 
 
 dev_dependencies:
