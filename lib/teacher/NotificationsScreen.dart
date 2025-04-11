@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 
-class NotificationModel {
-  String title;
-  String message;
-  bool isRead;
-  bool isEnabled; // Pour activer ou désactiver la notification
-
-  NotificationModel({
-    required this.title,
-    required this.message,
-    this.isRead = false,
-    this.isEnabled = true, // Par défaut, la notification est activée
-  });
+void main() {
+  runApp(MaterialApp(
+    home: NotificationsScreen(),
+    routes: {
+      '/alerts': (context) => AlertScreen(),
+      '/settings': (context) => SettingsScreen(),
+    },
+  ));
 }
 
 class NotificationsScreen extends StatefulWidget {
@@ -20,57 +16,66 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
-  // Liste des notifications
-  List<NotificationModel> notifications = [
-    NotificationModel(title: 'Réunion importante', message: 'Il y a une réunion ce vendredi à 10h.', isRead: false),
-    NotificationModel(title: 'Changement de planning', message: 'Votre emploi du temps a été modifié.', isRead: true),
-    NotificationModel(title: 'Examen', message: 'L\'examen de mathématiques est prévu pour lundi.', isRead: false),
-    NotificationModel(title: 'Devoir à rendre', message: 'Vous devez rendre le devoir de physique avant vendredi.', isRead: false),
+  final List<Map<String, String>> notifications = [
+    {
+      'titre': 'Changement d’horaire',
+      'contenu': 'Le cours de Math est déplacé à 10h.',
+      'date': '11 Avril',
+      'status': 'Non lu',
+      'category': 'Cours',
+    },
+    {
+      'titre': 'Résultats disponibles',
+      'contenu': 'Vos résultats du semestre sont disponibles.',
+      'date': '10 Avril',
+      'status': 'Lu',
+      'category': 'Annonces',
+    },
+    {
+      'titre': 'Rappel devoir',
+      'contenu': 'Remettez votre devoir d’histoire avant le 15 Avril.',
+      'date': '08 Avril',
+      'status': 'Non lu',
+      'category': 'Devoirs',
+    },
+    {
+      'titre': 'Nouvel examen',
+      'contenu': 'Examen de physique prévu le 20 Avril à 14h.',
+      'date': '07 Avril',
+      'status': 'Lu',
+      'category': 'Examen',
+    },
   ];
 
-  // Marquer la notification comme lue ou non lue
-  void _toggleReadStatus(int index) {
-    setState(() {
-      notifications[index].isRead = !notifications[index].isRead;
-    });
-  }
+  bool _pushNotificationEnabled = true;
+  bool _emailNotificationEnabled = false;
 
-  // Supprimer une notification
-  void _deleteNotification(int index) {
-    setState(() {
-      notifications.removeAt(index);
-    });
-  }
-
-  // Activer ou désactiver une notification
-  void _toggleNotificationStatus(int index) {
-    setState(() {
-      notifications[index].isEnabled = !notifications[index].isEnabled;
-    });
-  }
-
-  // Afficher les détails de la notification
-  void _showNotificationDetails(BuildContext context, NotificationModel notification) {
+  void _showNotificationDetails(Map<String, String> notification) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(notification.title),
+          title: Text(notification['titre']!, style: TextStyle(fontSize: 20)),
           content: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Message: ${notification.message}'),
+              Text('Contenu: ${notification['contenu']}', style: TextStyle(fontSize: 16)),
               SizedBox(height: 10),
-              Text('Statut: ${notification.isRead ? "Lu" : "Non lu"}'),
-              Text('Notification activée: ${notification.isEnabled ? "Oui" : "Non"}'),
+              Text('Date: ${notification['date']}', style: TextStyle(fontSize: 16)),
+              SizedBox(height: 10),
+              Text('Statut: ${notification['status']}', style: TextStyle(fontSize: 16)),
             ],
           ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context); // Ferme la mise à jour
+                setState(() {
+                  notification['status'] = 'Lu';
+                });
+                Navigator.of(context).pop();
               },
-              child: Text('Fermer'),
+              child: Text('Marquer comme lu', style: TextStyle(fontSize: 16)),
             ),
           ],
         );
@@ -78,95 +83,307 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     );
   }
 
+  void _sendNotification(String message, String recipientType) {
+    print('Envoyer notification à $recipientType : $message');
+  }
+
+  void _deleteNotification(int index) {
+    setState(() {
+      notifications.removeAt(index);
+    });
+  }
+
+  void _archiveNotification(int index) {
+    print('Notification archivée : ${notifications[index]}');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Gérer les Notifications'),
-        backgroundColor: Colors.blue,
+        title: Text('Notifications', style: TextStyle(fontSize: 22)),
+        backgroundColor: Colors.blueAccent,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings, size: 28),
+            onPressed: () {
+              Navigator.pushNamed(context, '/settings');
+            },
+          ),
+        ],
       ),
-      body: ListView.builder(
-        itemCount: notifications.length,
-        itemBuilder: (context, index) {
-          final notification = notifications[index];
-
-          return Card(
-            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            elevation: 5,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: ListTile(
-              leading: Icon(
-                notification.isRead ? Icons.done : Icons.markunread,
-                color: notification.isRead ? Colors.green : Colors.blue,
-              ),
-              title: Text(
-                notification.title,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: notification.isRead ? Colors.grey : Colors.black,
-                ),
-              ),
-              subtitle: Text(
-                notification.message,
-                style: TextStyle(
-                  color: notification.isRead ? Colors.grey : Colors.black,
-                ),
-              ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Bouton pour activer/désactiver la notification
-                  IconButton(
-                    icon: Icon(
-                      notification.isEnabled ? Icons.notifications : Icons.notifications_off,
-                      color: notification.isEnabled ? Colors.blue : Colors.grey,
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: notifications.length,
+                itemBuilder: (context, index) {
+                  final notif = notifications[index];
+                  return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    onPressed: () => _toggleNotificationStatus(index),
+                    color: notif['status'] == 'Lu'
+                        ? Colors.green.shade50
+                        : Colors.red.shade50,
+                    elevation: 4,
+                    margin: EdgeInsets.symmetric(vertical: 8),
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(12),
+                      leading: Icon(
+                        notif['category'] == 'Cours'
+                            ? Icons.book
+                            : notif['category'] == 'Examen'
+                            ? Icons.event
+                            : Icons.notifications,
+                        color: notif['status'] == 'Lu'
+                            ? Colors.green
+                            : Colors.red,
+                        size: 32,
+                      ),
+                      title: Text(
+                        notif['titre']!,
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.only(top: 6.0),
+                        child: Text(
+                          notif['contenu']!,
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      trailing: Text(
+                        notif['date']!,
+                        style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                      ),
+                      onTap: () => _showNotificationDetails(notif),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                children: [
+                  SwitchListTile(
+                    title: Text('Notifications Push', style: TextStyle(fontSize: 16)),
+                    value: _pushNotificationEnabled,
+                    onChanged: (bool value) {
+                      setState(() {
+                        _pushNotificationEnabled = value;
+                      });
+                    },
                   ),
-                  // Bouton pour supprimer la notification
-                  IconButton(
-                    icon: Icon(Icons.delete, color: Colors.red),
-                    onPressed: () => _deleteNotification(index),
+                  SwitchListTile(
+                    title: Text('Notifications par Email', style: TextStyle(fontSize: 16)),
+                    value: _emailNotificationEnabled,
+                    onChanged: (bool value) {
+                      setState(() {
+                        _emailNotificationEnabled = value;
+                      });
+                    },
                   ),
                 ],
               ),
-              onTap: () {
-                _toggleReadStatus(index); // Marquer comme lue/non lue
-                _showNotificationDetails(context, notification); // Afficher les détails de la notification
-              },
             ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            builder: (context) {
+              String selectedRecipient = 'Classe entière';
+              String selectedType = 'Rappel de devoir';
+              String message = '';
+
+              return Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                    left: 20,
+                    right: 20,
+                    top: 20),
+                child: StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setModalState) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('Envoyer une notification',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 10),
+                        DropdownButtonFormField<String>(
+                          value: selectedRecipient,
+                          decoration:
+                          InputDecoration(labelText: 'Destinataires'),
+                          items: ['Classe entière', 'Élève spécifique', 'Parents']
+                              .map((item) => DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(item),
+                          ))
+                              .toList(),
+                          onChanged: (value) {
+                            setModalState(() {
+                              selectedRecipient = value!;
+                            });
+                          },
+                        ),
+                        DropdownButtonFormField<String>(
+                          value: selectedType,
+                          decoration:
+                          InputDecoration(labelText: 'Type de notification'),
+                          items: [
+                            'Rappel de devoir',
+                            'Changement d’horaire',
+                            'Absence',
+                            'Annonces'
+                          ]
+                              .map((item) => DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(item),
+                          ))
+                              .toList(),
+                          onChanged: (value) {
+                            setModalState(() {
+                              selectedType = value!;
+                            });
+                          },
+                        ),
+                        TextField(
+                          decoration:
+                          InputDecoration(labelText: 'Contenu'),
+                          maxLines: 3,
+                          onChanged: (value) {
+                            message = value;
+                          },
+                        ),
+                        SizedBox(height: 12),
+                        ElevatedButton.icon(
+                          icon: Icon(Icons.send),
+                          label: Text('Envoyer'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                            padding: EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 24),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            _sendNotification(
+                                '[$selectedType] $message', selectedRecipient);
+                          },
+                        ),
+                        SizedBox(height: 20),
+                      ],
+                    );
+                  },
+                ),
+              );
+            },
           );
         },
+        child: Icon(Icons.send),
+        backgroundColor: Colors.blueAccent,
+        tooltip: 'Envoyer Notification',
       ),
     );
   }
 }
 
-class TeacherHomeScreen extends StatelessWidget {
+class AlertScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Espace Professeur'),
-        backgroundColor: Colors.blue,
+        title: Text('Créer une Alerte', style: TextStyle(fontSize: 22)),
+        backgroundColor: Colors.blueAccent,
       ),
-      body: Column(
-        children: [
-          // Titre de l'écran
-          SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              // Navigation vers l'écran des notifications
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NotificationsScreen()),
-              );
-            },
-            child: Text("Gérer les Notifications"),
-          ),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          children: [
+            TextField(
+              decoration: InputDecoration(labelText: 'Titre de l\'alerte'),
+              style: TextStyle(fontSize: 16),
+            ),
+            TextField(
+              decoration: InputDecoration(labelText: 'Description de l\'alerte'),
+              style: TextStyle(fontSize: 16),
+            ),
+            DropdownButtonFormField<String>(
+              decoration: InputDecoration(labelText: 'Choisir les destinataires'),
+              items: ['Classe entière', 'Élève spécifique', 'Parents']
+                  .map((item) => DropdownMenuItem<String>(
+                value: item,
+                child: Text(item, style: TextStyle(fontSize: 16)),
+              ))
+                  .toList(),
+              onChanged: (value) {},
+            ),
+            ElevatedButton(
+              onPressed: () {
+                print('Alerte envoyée');
+              },
+              child: Text('Envoyer l\'alerte', style: TextStyle(fontSize: 18)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SettingsScreen extends StatefulWidget {
+  @override
+  _SettingsScreenState createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  bool _pushNotificationEnabled = true;
+  bool _emailNotificationEnabled = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Paramètres', style: TextStyle(fontSize: 22)),
+        backgroundColor: Colors.blueAccent,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          children: [
+            SwitchListTile(
+              title: Text('Notifications Push', style: TextStyle(fontSize: 16)),
+              value: _pushNotificationEnabled,
+              onChanged: (bool value) {
+                setState(() {
+                  _pushNotificationEnabled = value;
+                });
+              },
+            ),
+            SwitchListTile(
+              title: Text('Notifications par Email', style: TextStyle(fontSize: 16)),
+              value: _emailNotificationEnabled,
+              onChanged: (bool value) {
+                setState(() {
+                  _emailNotificationEnabled = value;
+                });
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

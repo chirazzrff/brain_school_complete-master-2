@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import '../../teacher/CahierDeTexteScreen.dart';
+import '../../teacher/ChangePasswordScreen.dart';
 import '../../teacher/EmploiDuTempsScreen.dart';
 import '../../teacher/ModifierProfilScreen.dart';
 import '../../teacher/MyCoursesScreen.dart';
+import '../../teacher/NotificationsScreen.dart';
 import '../../teacher/StudentsListScreen.dart';
 import '../../teacher/ExamResultsScreen.dart';
 import 'MesCoursScreen.dart';
 import 'emploi_du_temps_screen.dart';
+import 'NotificationsScreen.dart';  // Assurez-vous d'importer le fichier NotificationsScreen.dart
 
 class TeacherHomeScreen extends StatelessWidget {
   const TeacherHomeScreen({Key? key}) : super(key: key);
@@ -15,27 +18,6 @@ class TeacherHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String teacherName = 'Mr. Karim B.';
-
-    // Fonction pour afficher une notification
-    void _showNotification(String message) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Notification', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            content: Text(message, style: TextStyle(fontSize: 16)),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('OK', style: TextStyle(fontSize: 16, color: Colors.blue)),
-              ),
-            ],
-          );
-        },
-      );
-    }
 
     // Fonction pour changer le mot de passe
     void _changePassword() {
@@ -173,14 +155,23 @@ class TeacherHomeScreen extends StatelessWidget {
                   icon: Icons.notifications,
                   title: "Notifications",
                   onPress: () {
-                    _showNotification('Nouvelle mise à jour dans l\'emploi du temps.');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => NotificationsScreen()),
+                    );
                   },
                 ),
                 HomeCard(
                   icon: Icons.lock,
                   title: "Mot de Passe",
-                  onPress: _changePassword,
+                  onPress: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ChangePasswordScreen()),
+                    );
+                  },
                 ),
+
                 HomeCard(
                   icon: Icons.logout,
                   title: "Déconnexion",
