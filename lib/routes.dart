@@ -1,4 +1,6 @@
 
+import 'package:brain_school/parent/parent_home_screen.dart';
+import 'package:brain_school/parent/parent_profile_screen.dart';
 import 'package:brain_school/screens/admin/Manage_Users.dart';
 import 'package:brain_school/screens/home_screen/parent_home_screen.dart';
 import 'package:brain_school/screens/home_screen/teacher_home_screen.dart';

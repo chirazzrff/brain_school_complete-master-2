@@ -1,3 +1,7 @@
+import 'package:brain_school/parent/chat_with_school_screen.dart';
+import 'package:brain_school/parent/grades_screen.dart';
+import 'package:brain_school/parent/homework_screen.dart';
+import 'package:brain_school/parent/technical_support_screen.dart';
 import 'package:brain_school/routes.dart';
 import 'package:brain_school/screens/admin/manage_Users.dart';
 import 'package:brain_school/screens/my_profile/my_profile.dart';
@@ -52,6 +56,12 @@ class MyApp extends StatelessWidget {
           MyProfileScreen.routeName: (context) => MyProfileScreen(),
           MyProfileScreen.routeName: (context) => const MyProfileScreen(),
           'StudentProfile': (context) => StudentProfileScreen(),
+
+          'HomeworkScreen': (context) => const HomeworkScreen(),'GradesScreen': (context) => const GradesScreen(),
+          'ChatWithSchoolScreen': (context) => const ChatWithSchoolScreen(),
+
+          'TechnicalSupportScreen': (context) => const TechnicalSupportScreen(),
+
         },
       );
     });
