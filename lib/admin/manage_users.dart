@@ -16,6 +16,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
   List<Map<String, dynamic>> filteredUsers = [];
   TextEditingController searchController = TextEditingController();
   String? selectedRole = 'student'; // Valeur par défaut pour le rôle
+  String genderController = 'Homme'; // ✅ Valeur par défaut pour le genre
 
   @override
   void initState() {
@@ -47,16 +48,45 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
 
   // Ajouter un utilisateur
   Future<void> addUser(String name, String email, String role) async {
-    await supabase.from('users').insert({
+    if (name.isEmpty || email.isEmpty) {
+      // Validation pour s'assurer que le nom et l'email ne sont pas vides
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Nom et email sont requis')),
+      );
+      return;
+    }
+
+    final data = {
       'name': name,
       'email': email,
       'role': role,
-    });
+      'gender': genderController, // ✅ Utilisation correcte
+    };
+
+    if (role == 'student') {
+      final res = await supabase.from('students').insert(data);
+      print("Added student: $res");
+    } else if (role == 'teacher') {
+      final res = await supabase.from('teachers').insert(data);
+      print("Added teacher: $res");
+    } else if (role == 'parent') {
+      final res = await supabase.from('parents').insert(data);
+      print("Added parent: $res");
+    }
+
     fetchUsers();
   }
 
   // Modifier un utilisateur
   Future<void> editUser(int id, String name, String role) async {
+    if (name.isEmpty) {
+      // Validation pour s'assurer que le nom n'est pas vide
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Le nom ne peut pas être vide')),
+      );
+      return;
+    }
+
     await supabase.from('users').update({
       'name': name,
       'role': role,
@@ -75,6 +105,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
     final nameController = TextEditingController(text: user?['name']);
     final emailController = TextEditingController(text: user?['email']);
     selectedRole = user?['role'] ?? 'student'; // Par défaut 'student' si non défini
+    genderController = user?['gender'] ?? 'Homme'; // Récupérer le genre existant s’il existe
 
     showDialog(
       context: context,
@@ -86,21 +117,21 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
             TextField(controller: nameController, decoration: InputDecoration(labelText: 'Nom')),
             if (user == null)
               TextField(controller: emailController, decoration: InputDecoration(labelText: 'Email')),
-            // Dropdown pour choisir le rôle
+            DropdownButtonFormField<String>(
+              value: genderController,
+              onChanged: (val) => setState(() => genderController = val!),
+              items: ['Homme', 'Femme']
+                  .map((g) => DropdownMenuItem(value: g, child: Text(g)))
+                  .toList(),
+              decoration: InputDecoration(labelText: 'Genre'),
+            ),
             DropdownButton<String>(
               value: selectedRole,
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedRole = newValue;
-                });
-              },
-              items: <String>['student', 'teacher', 'parent']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value[0].toUpperCase() + value.substring(1)),
-                );
-              }).toList(),
+              onChanged: (val) => setState(() => selectedRole = val!),
+              items: ['student', 'teacher', 'parent']
+                  .map((r) => DropdownMenuItem(
+                  value: r, child: Text(r[0].toUpperCase() + r.substring(1))))
+                  .toList(),
             ),
           ],
         ),
@@ -149,7 +180,6 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
-            // Barre de recherche
             TextField(
               controller: searchController,
               decoration: InputDecoration(
@@ -159,7 +189,6 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
               ),
             ),
             SizedBox(height: 16),
-            // Liste des utilisateurs
             Expanded(
               child: filteredUsers.isEmpty
                   ? Center(child: Text('Aucun utilisateur trouvé'))
@@ -174,6 +203,9 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                       child: ListTile(
                         contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        leading: user['gender'] == 'Homme'
+                            ? Icon(Icons.man, color: Colors.blue)
+                            : Icon(Icons.woman, color: Colors.pink),
                         title: Text(user['name'], style: TextStyle(fontSize: 16)),
                         subtitle: Text("Rôle: ${user['role']}"),
                         trailing: Row(

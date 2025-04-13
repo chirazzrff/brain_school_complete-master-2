@@ -71,27 +71,77 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
         final user = response.user;
         if (user != null) {
-          // ✅ Insérer les infos dans la table profiles
+          final userId = user.id;
+          final fullName = _fullNameController.text.trim();
+          final gender = _gender;
+          final dateOfBirth = _selectedDate != null
+              ? DateFormat('yyyy-MM-dd').format(_selectedDate!)
+              : null;
+          final userType = _userType;
+
+          // ✅ Insérer les données dans la table spécifique
+          if (userType == "Student") {
+            await Supabase.instance.client.from('students').insert({
+              'id': userId,
+              'full_name': fullName,
+              'gender': gender,
+              'date_of_birth': dateOfBirth,
+            });
+          } else if (userType == "Parent") {
+            await Supabase.instance.client.from('parents').insert({
+              'id': userId,
+              'full_name': fullName,
+              'gender': gender,
+              'date_of_birth': dateOfBirth,
+            });
+          } else if (userType == "Teacher") {
+            await Supabase.instance.client.from('teachers').insert({
+              'id': userId,
+              'full_name': fullName,
+              'gender': gender,
+              'date_of_birth': dateOfBirth,
+            });
+
+          }
+          else if (userType == "Admin") {
+            await Supabase.instance.client.from('admins').insert({
+              'id': userId,
+              'full_name': fullName,
+              'gender': gender,
+              'date_of_birth': dateOfBirth,
+            });
+          }
+
+// ✅ Enregistrer le type d'utilisateur dans la table "profiles"
           await Supabase.instance.client.from('profiles').insert({
-            'id': user.id, // Correspond à auth.users.id
-            'full_name': _fullNameController.text.trim(),
-            'gender': _gender,
-            'date_of_birth': _selectedDate != null
-                ? DateFormat('yyyy-MM-dd').format(_selectedDate!)
-                : null,
-            'user_type': _userType,
+            'id': userId,
+            'user_type': userType,
           });
+
+          // ✅ Afficher une notification
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Sign-up successful!')),
+          );
+
+          // ✅ Redirection selon le type
+          if (userType == "Student") {
+            Navigator.pushReplacementNamed(context, 'myprofile');
+          } else {
+            Navigator.pop(context);
+          }
 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Sign-up successful!')),
           );
-          if (_userType == "Student") {
+
+          // ✅ Navigation selon le type
+          if (userType == "Student") {
             Navigator.pushReplacementNamed(context, 'myprofile');
+          } else {
+            Navigator.pop(context);
           }
-
-
-          Navigator.pop(context);
         }
+
       } catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Sign-up error: $error')),
